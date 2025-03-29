@@ -1,29 +1,29 @@
-Device Name,Power Rating (W),Total Runtime (hrs),Energy Consumed (kWh),Cost per kWh ($),Total Cost ($),Total Cost (INR)
-Server Rack 1,800,120,96,0.18,17.28,1478.48
-Server Rack 2,850,115,97.75,0.18,17.60,1505.86
-Workstation 1,250,40,10,0.18,1.80,154.01
-Workstation 2,250,38,9.5,0.18,1.71,146.31
-Workstation 3,250,42,10.5,0.18,1.89,161.71
-Workstation 4,250,36,9,0.18,1.62,138.61
-Workstation 5,250,45,11.25,0.18,2.03,173.69
-Air Conditioner 1,1500,50,75,0.22,16.50,1411.74
-Air Conditioner 2,1500,55,82.5,0.22,18.15,1552.91
-Air Conditioner 3,1500,48,72,0.22,15.84,1355.27
-Printer 1,100,20,2,0.18,0.36,30.80
-Printer 2,120,25,3,0.18,0.54,46.20
-Lights,200,168,33.6,0.16,5.38,460.31
-Router 1,50,168,8.4,0.16,1.34,114.65
-Router 2,60,168,10.08,0.16,1.61,137.75
-Coffee Machine,1100,30,33,0.20,6.60,564.70
-Microwave,1200,15,18,0.20,3.60,308.02
-Refrigerator,500,168,84,0.20,16.80,1437.41
-Server Rack 3,900,100,90,0.18,16.20,1386.07
-Workstation 6,300,50,15,0.18,2.70,231.01
-Workstation 7,300,55,16.5,0.18,2.97,254.11
-Air Conditioner 4,1500,60,90,0.22,19.80,1694.09
-Air Conditioner 5,1500,40,60,0.22,13.20,1129.39
-Projector,300,20,6,0.18,1.08,92.40
-Electric Kettle,1500,10,25,0.20,5.00,427.80
-Dishwasher,1200,30,36,0.20,7.20,616.03
-Vacuum Cleaner,800,20,16,0.18,2.88,246.41
-Smart TV,200,40,8,0.18,1.44,123.21
+Device Name,Power Rating (W),Total Runtime (hrs),Energy Consumed (kWh),Cost per kWh (INR),Total Cost (INR)
+Server Rack 1,800,120,96,15.40,1478.48
+Server Rack 2,850,115,97.75,15.40,1505.86
+Workstation 1,250,40,10,15.40,154.01
+Workstation 2,250,38,9.5,15.40,146.31
+Workstation 3,250,42,10.5,15.40,161.71
+Workstation 4,250,36,9,15.40,138.61
+Workstation 5,250,45,11.25,15.40,173.69
+Air Conditioner 1,1500,50,75,18.82,1411.74
+Air Conditioner 2,1500,55,82.5,18.82,1552.91
+Air Conditioner 3,1500,48,72,18.82,1355.27
+Printer 1,100,20,2,15.40,30.80
+Printer 2,120,25,3,15.40,46.20
+Lights,200,168,33.6,13.69,460.31
+Router 1,50,168,8.4,13.69,114.65
+Router 2,60,168,10.08,13.69,137.75
+Coffee Machine,1100,30,33,17.11,564.70
+Microwave,1200,15,18,17.11,308.02
+Refrigerator,500,168,84,17.11,1437.41
+Server Rack 3,900,100,90,15.40,1386.07
+Workstation 6,300,50,15,15.40,231.01
+Workstation 7,300,55,16.5,15.40,254.11
+Air Conditioner 4,1500,60,90,18.82,1694.09
+Air Conditioner 5,1500,40,60,18.82,1129.39
+Projector,300,20,6,15.40,92.40
+Electric Kettle,1500,10,25,17.11,427.80
+Dishwasher,1200,30,36,17.11,616.03
+Vacuum Cleaner,800,20,16,15.40,246.41
+Smart TV,200,40,8,15.40,123.21
