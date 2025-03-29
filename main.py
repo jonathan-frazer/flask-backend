@@ -3,7 +3,7 @@ import pprint
 
 def get_results(company_name, max_budget):
 
-    #INPUTS:-
+    #INPUTS(I've printed them out for your convenience):-
 
     # Company Name : str
     # Max Budget : float
@@ -12,6 +12,8 @@ def get_results(company_name, max_budget):
     # CSV File - (Read it to see it's format)
     df = pd.read_csv('energy_consumption.csv')
     print(f"Dataframe:-\n{df}")
+
+
 
     #OUTPUTS:-
 
@@ -49,6 +51,7 @@ def get_results(company_name, max_budget):
 
 #Gives example of output if run directly
 if __name__ == '__main__': 
+    print("\n\nInput:-")
     result_data = get_results("Chandan Enterprises", 12000)
     print("\n\nOutput:-")
     pprint.pprint(result_data)

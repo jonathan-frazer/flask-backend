@@ -15,7 +15,7 @@ CORS(app)
 @app.route('/api/eco_react', methods = ['GET', 'POST']) 
 def input_form(): 
     if(request.method == 'GET'): 
-        data = "hello world"
+        data = "API Works"
         return jsonify({'data': data})
 
     if(request.method == 'POST'):

@@ -1,8 +1,29 @@
-Outlook,Temperature,Humidity,Windy,PlayTennis
-Sunny,Hot,High,FALSE,No
-Sunny,Hot,High,TRUE,No
-Overcast,Hot,High,FALSE,Yes
-Rain,Cold,High,FALSE,Yes
-Rain,Cold,High,TRUE,No
-Overcast,Hot,High,TRUE,Yes
-Sunny,Hot,High,FALSE,No
+Device Name,Power Rating (W),Total Runtime (hrs),Energy Consumed (kWh),Cost per kWh ($),Total Cost ($)
+Server Rack 1,800,120,96,0.18,17.28
+Server Rack 2,850,115,97.75,0.18,17.60
+Workstation 1,250,40,10,0.18,1.80
+Workstation 2,250,38,9.5,0.18,1.71
+Workstation 3,250,42,10.5,0.18,1.89
+Workstation 4,250,36,9,0.18,1.62
+Workstation 5,250,45,11.25,0.18,2.03
+Air Conditioner 1,1500,50,75,0.22,16.50
+Air Conditioner 2,1500,55,82.5,0.22,18.15
+Air Conditioner 3,1500,48,72,0.22,15.84
+Printer 1,100,20,2,0.18,0.36
+Printer 2,120,25,3,0.18,0.54
+Lights,200,168,33.6,0.16,5.38
+Router 1,50,168,8.4,0.16,1.34
+Router 2,60,168,10.08,0.16,1.61
+Coffee Machine,1100,30,33,0.20,6.60
+Microwave,1200,15,18,0.20,3.60
+Refrigerator,500,168,84,0.20,16.80
+Server Rack 3,900,100,90,0.18,16.20
+Workstation 6,300,50,15,0.18,2.70
+Workstation 7,300,55,16.5,0.18,2.97
+Air Conditioner 4,1500,60,90,0.22,19.80
+Air Conditioner 5,1500,40,60,0.22,13.20
+Projector,300,20,6,0.18,1.08
+Electric Kettle,1500,10,25,0.20,5.00
+Dishwasher,1200,30,36,0.20,7.20
+Vacuum Cleaner,800,20,16,0.18,2.88
+Smart TV,200,40,8,0.18,1.44
