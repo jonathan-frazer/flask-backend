@@ -1,6 +1,6 @@
 **Contributor Guidelines**
 
-1. **Do not touch `app.py`**. Instead, modify main.py making sure to follow the output.
+1. **Do not touch `app.py`**. Instead, modify main.py making sure to follow the output format.
 2. **Follow the input and output structure** provided in `main.py`.
 3. **Install packages responsibly**:
 	* If you install a new package, run `pip freeze > requirements.txt` afterwards.
