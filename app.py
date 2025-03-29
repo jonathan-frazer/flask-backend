@@ -9,10 +9,14 @@ import pandas as pd
 app = Flask(__name__) 
 CORS(app)
 
-def get_results(company_name, max_budget,file_data):
+def get_results(company_name, max_budget):
+    
+    #Displays the Company Name : str, and Max Budget : float
     print(f"Company Name: {company_name}, Max Budget: {max_budget}")
-    df = pd.read_csv(file_data)
-    df.head(10)
+
+    #Energy Consumption -> CSV (Check the CSV in the Repo to see what it'll look like)
+    df = pd.read_csv('energy_consumption.csv')
+    print(f"Dataframe:-\n{df}")
 
     return {
             "message": f"We've analyzed {request.form['companyName']}'s data with a budget of ₹{max_budget}. Based on your CSV data, we recommend focusing on renewable energy investments and waste reduction programs to maximize eco-impact within your budget constraints.",
@@ -57,10 +61,10 @@ def input_form():
         max_budget = float(request.form['maxBudget'])
 
         #Print Consumption Data
-        file_data = request.files['file'].read().decode('utf-8')
+        file = request.files['file']
+        file.save('energy_consumption.csv')
 
-        #Results(Follow this format style for it to work)
-        results_data = get_results(company_name,max_budget,file_data)
+        results_data = get_results(company_name,max_budget)
 
         return jsonify(results_data), 200
   
