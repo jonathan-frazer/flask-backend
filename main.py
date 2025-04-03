@@ -15,7 +15,7 @@ def get_results(company_name, max_budget):
 
 
     #Guidelines
-    # These are my ways of doing it. If you got a better way where you can add an LLM to do Step 2 or 3, then Plz do,
+    # These are my ways of doing it. If you got a better way where you can add an LLM to do Step 2 or 3, then Plz do sincerely :( ,
     #
     # 0. -With CSV data, generate the budget_comparison details for all the 'initial' fields
     #
