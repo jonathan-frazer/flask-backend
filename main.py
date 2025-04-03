@@ -14,6 +14,23 @@ def get_results(company_name, max_budget):
     print(f"Dataframe:-\n{df}")
 
 
+    #Guidelines
+    # These are my ways of doing it. If you got a better way where you can add an LLM to do Step 2 or 3, then Plz do,
+    #
+    # 0. -With CSV data, generate the budget_comparison details for all the 'initial' fields
+    #
+    # 1. -Take the csv file and find out which devices cost the most per kWh,
+    #
+    # 2. -Search the web or Amazon for more energy efficient Alternatives. Retrieve as many as you can.
+    #    -Can be done through WebScraping
+    #
+    # 3. -Once Retrieved sort by the ones with min(energy_consumption/price). Add them to list of Chartdata
+    #    -Keep adding till totalCost exceeds the max_budget
+    #
+    # 4. -Once Generated calculate the budget_comparison details for all the 'improved'
+    #
+    # 5. -Using the list of items, Generate Summary using LLM.
+
 
     #OUTPUTS:-
 
@@ -27,7 +44,8 @@ def get_results(company_name, max_budget):
     #   "month" - Name of the Month
     #   "initial" - Takes the consumption data raw and showcases what it will be for the month
     #   "improved" - Modifies "initial" and showcases what it will be for the month with the replaced items
-
+    #
+    # Sample Output is given below 
     return {
             "message": f"We've analyzed {company_name}'s data with a budget of ₹{max_budget}. Based on your CSV data, we recommend focusing on renewable energy investments and waste reduction programs to maximize eco-impact within your budget constraints.",
             "chartData": [
