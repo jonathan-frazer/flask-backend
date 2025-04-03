@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # on the terminal type: curl http://127.0.0.1:5000/api/eco_react 
-# returns hello world when we use GET. 
+# returns "API Works" when we use GET. 
 # returns the data that we send when we use POST. 
 @app.route('/api/eco_react', methods = ['GET', 'POST']) 
 def input_form(): 
@@ -33,5 +33,4 @@ def input_form():
   
 # driver function 
 if __name__ == '__main__': 
-  
     app.run(debug = True) 
