@@ -14,6 +14,7 @@ def get_results(company_name, max_budget):
     #Scrape Amazon(Sariya) - Done
     devices_df = df.sort_values(by='Energy Consumed (kWh)', ascending=False)
     amazon_results_df = webscraper_module.search_amazon_from_df(devices_df)
+    amazon_results_df.to_csv('amazon_results.csv', index=False)
 
     #Find the best match Among the listed devices to buy(Sreehari)
     """ 
