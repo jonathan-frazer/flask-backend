@@ -1,6 +1,7 @@
 import pandas as pd
 import pprint
-import webscraper_module
+import module_webscraper
+from module_langchain import MistralLLM
 
 # --- Main Logic Function ---
 def get_results(company_name, max_budget):
@@ -13,13 +14,28 @@ def get_results(company_name, max_budget):
 
     #Scrape Amazon(Sariya) - Done
     devices_df = df.sort_values(by='Energy Consumed (kWh)', ascending=False)
-    amazon_results_df = webscraper_module.search_amazon_from_df(devices_df)
+    amazon_results_df = module_webscraper.search_amazon_from_df(devices_df)
     amazon_results_df.to_csv('amazon_results.csv', index=False)
 
     #Find the best match Among the listed devices to buy(Sreehari)
     """ 
     Use the Amazon Results Data Frame to find the best match
     """
+    energy_text = devices_df.to_string(index=False)
+    amazon_text = amazon_results_df.to_string(index=False)
+ 
+    prompt=f"""
+    Given the Dataset:-\n{amazon_text}
+    And the Energy Consumption Data:-\n{energy_text}
+    Budget: {max_budget}
+
+    Perform the Following Tasks:-\n
+    1. Using the 'Rating' field in the Dataset [0-5], find out the Power Rating for each of the items in Watts. If not present, estimate it from the Star Rating.
+    2. From this Power Rating, find out the most efficient Items to buy. Keeping within Max Budget. Try Utilizing a Greedy approach taking ratio of Power:Price into account.
+    3. Once these items are found, Sub them in the Energy Consumption Data. and **return the ONLY new CSV File.**     
+    """
+    llm=MistralLLM()
+    response=llm.invoke(prompt)
 
     #Generate the Projections(Cherishma & Madhu)
     """
