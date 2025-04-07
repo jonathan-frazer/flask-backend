@@ -25,16 +25,6 @@ def get_results(company_name, max_budget):
     Use initial consumption data to generate initial projection
     Then Use Sreehari's results to generate the data for the next months. 
     """
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
-    budget_data = []
-    for i, month in enumerate(months):
-        initial = max_budget * (0.12 + i * 0.01)
-        improved = initial * 0.85  # Assume 15% savings
-        budget_data.append({
-            "month": month,
-            "initial": round(initial, 2),
-            "improved": round(improved, 2)
-        })
 
     #Generate Summary(Glen)
     """
