@@ -1,7 +1,7 @@
 import pandas as pd
 import pprint
 import webscraper_module
-
+from model import MistralLLM
 # --- Main Logic Function ---
 def get_results(company_name, max_budget):
     print(f"Company Name: {company_name}, Max Budget: {max_budget}")
@@ -20,6 +20,15 @@ def get_results(company_name, max_budget):
     """ 
     Use the Amazon Results Data Frame to find the best match
     """
+    df1=pd.read_csv('example_amazon_result.csv')
+    amazon_df=df1.sort_values(by='value',ascending=False)
+    energy_text = devices_df.to_string(index=False)
+    amazon_text = amazon_df.to_string(index=False)
+
+    prompt=" "
+    llm=MistralLLM()
+    response=llm.invoke(prompt)
+    
 
     #Generate the Projections(Cherishma & Madhu)
     """
