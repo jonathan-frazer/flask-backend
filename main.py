@@ -20,7 +20,7 @@ def get_results(company_name, max_budget):
     Use the Amazon Results Data Frame to find the best match
     """
 
-    #Generate the Projections(Cherishma & Glen)
+    #Generate the Projections(Cherishma & Madhu)
     """
     Use initial consumption data to generate initial projection
     Then Use Sreehari's results to generate the data for the next months. 
