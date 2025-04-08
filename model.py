@@ -2,10 +2,14 @@ import requests
 from langchain.schema.runnable import Runnable
 import json
 
+MISTRAL_API_KEY = ""
+with open("api_key.txt") as f:
+    MISTRAL_API_KEY = f.read().strip()
+
 class MistralLLM(Runnable):
     """Custom LLM class to interact with Mistral with streaming support"""
 
-    def __init__(self, model_name="mistral-large-latest", api_key="add_your_key"):
+    def __init__(self, model_name="mistral-large-latest", api_key=MISTRAL_API_KEY):
         self.api_key = api_key
         self.model_name = model_name
         self.api_url = "https://api.mistral.ai/v1/chat/completions"

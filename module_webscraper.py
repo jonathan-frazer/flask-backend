@@ -85,16 +85,15 @@ def search_amazon_from_df(devices_df):
                 continue
 
             all_items.append({
-                "name": item['name'],
+                "Name": item['name'],
                 "value": item['price'],
                 "url": item['url'],
-                "rating": item.get('rating'),
-                "reviews": item.get('reviews')
+                "rating": item.get('rating')
             })
             seen_urls.add(item['url'])
 
         time.sleep(random.uniform(1, 3))
 
     items_df = pd.DataFrame(all_items)
-    print(items_df.head())
+    
     return items_df

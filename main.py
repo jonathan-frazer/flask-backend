@@ -15,16 +15,20 @@ def get_results(company_name, max_budget):
     #Scrape Amazon(Sariya) - Done
     devices_df = df.sort_values(by='Energy Consumed (kWh)', ascending=False)
     amazon_results_df = module_webscraper.search_amazon_from_df(devices_df)
+    amazon_results_df.reset_index(inplace=True)
     amazon_results_df.to_csv('amazon_results.csv', index=False)
 
     #Find the best match Among the listed devices to buy(Sreehari)
     """ 
     Use the Amazon Results Data Frame to find the best match
     """
+
     energy_text = devices_df.to_string(index=False)
-    amazon_text = amazon_results_df.to_string(index=False)
+    amazon_text = amazon_results_df.drop('url', axis=1).to_string(index=False)
  
     prompt=f"""
+    You are given the Role of a Data processor, **You can only return CSV Files any other data, even response text is NOT PERMITTED**
+
     Given the Dataset:-\n{amazon_text}
     And the Energy Consumption Data:-\n{energy_text}
     Budget: {max_budget}
@@ -32,49 +36,79 @@ def get_results(company_name, max_budget):
     Perform the Following Tasks:-\n
     1. Using the 'Rating' field in the Dataset [0-5], find out the Power Rating for each of the items in Watts. If not present, estimate it from the Star Rating.
     2. From this Power Rating, find out the most efficient Items to buy. Keeping within Max Budget. Try Utilizing a Greedy approach taking ratio of Power:Price into account.
-    3. Once these items are found, Sub them in the Energy Consumption Data. and *return the ONLY new CSV File.*     
+    3. Once these items are found, Add their index values to the corresponding Energy Consumption Data row, in a new column called called 'mapIndex'. For ones without a mapIndex, fill it with -1. Once done *return the ONLY new CSV File.*
     """
+    
     llm=MistralLLM()
+    print(prompt)
     response=llm.invoke(prompt)
-    print("Debug - LLM Response:(Sreehari)", response)
 
+    print("Hariharan - Response:\n",response)
+
+    #Write to CSV
+    with open('llm_response.csv', 'w') as f:
+        f.write(response.replace("```csv\n",'').replace("```",''))
+
+    #Read to Data Frame
+    response_df = pd.read_csv('llm_response.csv')
+    response_df = response_df[response_df['mapIndex'] != -1]
+    
+    #Map the Data using JOIN and Perform Cleaning
+    mapped_df = pd.merge(response_df, amazon_results_df, how='left', left_on='mapIndex', right_on='index').drop(columns=['mapIndex', 'index'])    
+    print(mapped_df)
+    mapped_df['Power Rating (W)'] = mapped_df.apply(lambda row: row['Power Rating (W)'] *(1.0-0.2*row['rating']), axis=1)
+    mapped_df['Energy Consumed (kWh)'] = mapped_df['Power Rating (W)'] * mapped_df['Total Runtime (hrs)'] / 1000
+    mapped_df['Total Cost (INR)'] = mapped_df['Energy Consumed (kWh)'] * mapped_df['Cost per kWh (INR)']
+    mapped_df = mapped_df.sort_values(by='value')
+    cum_sum = 0
+    filtered_df = pd.DataFrame(columns=mapped_df.columns)
+    for index, row in mapped_df.iterrows():
+        if (cum_sum + row['value']) < max_budget:
+            cum_sum += row['value']
+            filtered_df = filtered_df._append(row)
+
+    mapped_df = filtered_df
+    print(filtered_df)
+    mapped_df.to_csv('llm_mapped_data.csv', index=False)
+
+    improved_df = df.copy()
+    common_cols = improved_df.columns.intersection(mapped_df.columns)
+    improved_df.update(mapped_df[common_cols])
+    improved_df = improved_df[df.columns]
+    improved_df.to_csv('improved_energy_consumption.csv', index=False)
+    
+    mapped_df = pd.read_csv('llm_mapped_data.csv').rename(columns={'Device Name': 'name'})
+    chartData = mapped_df[["name", "value", "url"]].to_dict('records')
+    
     #Generate the Projections(Cherishma & Madhu)
     """
     Use initial consumption data to generate initial projection
     Then Use Sreehari's results to generate the data for the next months. 
     """
 
+    original_sum = round(float(df['Total Cost (INR)'].sum()),2)
+    improved_sum = round(float(improved_df['Total Cost (INR)'].sum()),2)
+
     #Generate Summary(Glen)
     """
       Relatively small job, feeding into LLM.
     """
     summary_prompt = f"""
-    You are an energy efficiency consultant. Your task is to analyze the energy consumption of the following company and provide a professional summary for business stakeholders.
+    You are an energy efficiency consultant. Your task is to analyze the energy consumption of the following company and provide a General summary.
 
     Company: {company_name}
     Maximum Budget: ₹{max_budget}
-
-    1. Original Energy Consumption Data:
-    {energy_text}
-
-    2. Recommended Products from Amazon:
-    {amazon_text}
+    Energy Consumption Data:{energy_text}
     
-    Your response should follow this format:
-
-    1. *Key Insights*: Highlight the main findings from the original energy data. Mention the most energy-consuming devices and potential inefficiencies.
-
-    2. *Recommendations*: List the specific products selected from Amazon, and explain why they were chosen. Focus on efficiency, cost-effectiveness, and how they help reduce energy usage within the budget.
-
-    3. *Projected Benefits*: Provide a brief projection of expected improvements. Include estimated monthly energy savings, and comment on the ROI or long-term financial/environmental impact.
-
-    Be concise, use bullet points where helpful, and maintain a business-professional tone.
+    Be Short and concise. Do not try any other formatting like **,
+    Return your answer in a simple paragraph without only a few figures
     """
     
     summary_response = llm.invoke(summary_prompt)
     print("Debug - LLM Response:(glen)", summary_response)
+    
 
-     #Example of how the RESPONSE should look like, follow the same SCHEMA
+    # Example of how the RESPONSE should look like, follow the same SCHEMA
     #"message" : Returns a Message summary generated by the LLM
     #"chartData" : Returns a List of new Items that are suggested to purchase.
     #   "name" - Name of the Item
@@ -87,29 +121,23 @@ def get_results(company_name, max_budget):
     #
     # Sample Output is given below 
     return {
-            "message": f"We've analyzed {company_name}'s data with a budget of ₹{max_budget}. Based on your CSV data, we recommend focusing on renewable energy investments and waste reduction programs to maximize eco-impact within your budget constraints.",
-            "chartData": [
-                {"name": "Air Conditioning", "value": max_budget * 0.4, "url": "https://www.example.com"},
-                {"name": "Refrigerator", "value": max_budget * 0.35, "url": "https://www.example.com"},
-                {"name": "Server Room", "value": max_budget * 0.25, "url": "https://www.example.com"},
-                {"name": "Recycling", "value": max_budget * 0.15, "url": "https://www.example.com"},
-                {"name": "Waste Segregation", "value": max_budget * 0.1, "url": "https://www.example.com"}
-            ],
+            "message": summary_response,
+            "chartData": chartData,
             "budgetComparisonData": [
-                {"month": "Jan", "initial": max_budget * 0.12, "improved": max_budget * 0.1},
-                {"month": "Feb", "initial": max_budget * 0.14, "improved": max_budget * 0.11},
-                {"month": "Mar", "initial": max_budget * 0.13, "improved": max_budget * 0.09},
-                {"month": "Apr", "initial": max_budget * 0.15, "improved": max_budget * 0.1},
-                {"month": "May", "initial": max_budget * 0.16, "improved": max_budget * 0.11},
-                {"month": "Jun", "initial": max_budget * 0.17, "improved": max_budget * 0.12},
-                {"month": "Jul", "initial": max_budget * 0.18, "improved": max_budget * 0.13},
-                {"month": "Aug", "initial": max_budget * 0.19, "improved": max_budget * 0.14},
+                {"month": "Jan", "initial": original_sum * 0.1196, "improved": improved_sum * 0.1196},
+                {"month": "Feb", "initial": original_sum * 0.1254, "improved": improved_sum * 0.1254},
+                {"month": "Mar", "initial": original_sum * 0.1323, "improved": improved_sum * 0.1323},
+                {"month": "Apr", "initial": original_sum * 0.1161, "improved": improved_sum * 0.1161},
+                {"month": "May", "initial": original_sum * 0.1275, "improved": improved_sum * 0.1275},
+                {"month": "Jun", "initial": original_sum * 0.1201, "improved": improved_sum * 0.1201},
+                {"month": "Jul", "initial": original_sum * 0.1321, "improved": improved_sum * 0.1321},
+                {"month": "Aug", "initial": original_sum * 0.1269, "improved": improved_sum * 0.1269},
             ],
         }
 
 #Gives example of output if run directly
 if __name__ == '__main__': 
     print("\n\nInput:-")
-    result_data = get_results("Chandan Enterprises", 12000)
+    result_data = get_results("Chandan Enterprises", 100000)
     print("\n\nOutput:-")
     pprint.pprint(result_data)
